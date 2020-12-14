@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-///查看大图类,版本:1.0.0
+///查看大图类,版本:1.0.1
 @interface FFBigImage : UIView
 ///点击查看大图方法
 +(void)bigImageView:(UIImageView *)imageView;
