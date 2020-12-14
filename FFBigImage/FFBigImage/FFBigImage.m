@@ -30,6 +30,7 @@ static CGRect oldframe;
     } else {
         window =  [UIApplication sharedApplication].keyWindow;
     }
+
     [window.rootViewController.view addSubview:backBtn];
     [window makeKeyAndVisible];
     
@@ -51,9 +52,14 @@ static CGRect oldframe;
 
     bigImageView.userInteractionEnabled = YES;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImage:)];
-    [bigImageView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImage:)];
+//    [bigImageView addGestureRecognizer:tap];
 
+    UIPinchGestureRecognizer *pin = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(pin:)];
+    [bigImageView addGestureRecognizer:pin];
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+    [bigImageView addGestureRecognizer:pan];
     //
     CGFloat moreHeight = 0.0;
     if ([self isIPHONEX] == YES) {
@@ -139,7 +145,17 @@ static CGRect oldframe;
         [imageView.superview removeFromSuperview];
     }];
 }
-
++(void)pin:(UIPinchGestureRecognizer *)pin{
+    UIImageView *imageView = (UIImageView*)pin.view;
+    imageView.transform = CGAffineTransformScale(imageView.transform,pin.scale,pin.scale);
+    pin.scale = 1;
+}
++(void)pan:(UIPanGestureRecognizer *)pan{
+    UIImageView *imageView = (UIImageView*)pan.view;
+    CGPoint p = [pan translationInView:imageView];
+    imageView.transform = CGAffineTransformTranslate(imageView.transform, p.x, p.y);
+    [pan setTranslation:CGPointZero inView:imageView];
+}
 //点击保存
 +(void)addArrows:(UIButton *)btn{
     UIView *v1 = btn.superview;
