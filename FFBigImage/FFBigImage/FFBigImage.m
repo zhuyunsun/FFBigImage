@@ -52,8 +52,8 @@ static CGRect oldframe;
 
     bigImageView.userInteractionEnabled = YES;
     
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImage:)];
-//    [bigImageView addGestureRecognizer:tap];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImage:)];
+    [bigImageView addGestureRecognizer:tap];
 
     UIPinchGestureRecognizer *pin = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(pin:)];
     [bigImageView addGestureRecognizer:pin];
@@ -129,7 +129,7 @@ static CGRect oldframe;
 }
 +(void)btnAction:(UIButton *)btn{
     UIImageView *imageView = (UIImageView*)[btn viewWithTag:20201211];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.45 animations:^{
         imageView.frame = oldframe;
         btn.alpha = 0;
     } completion:^(BOOL finished) {
@@ -138,11 +138,14 @@ static CGRect oldframe;
 }
 +(void)hideImage:(UITapGestureRecognizer*)tap{
     UIImageView *imageView = (UIImageView*)tap.view;
-    [UIView animateWithDuration:0.5 animations:^{
-        imageView.frame = oldframe;
-        imageView.superview.alpha = 0;
-    } completion:^(BOOL finished) {
-        [imageView.superview removeFromSuperview];
+    UIImage *image = imageView.image;
+    
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat height =  [UIScreen mainScreen].bounds.size.height;
+    CGFloat y = (height - image.size.height * width / image.size.width) / 2;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        imageView.frame = CGRectMake(0,y,width, image.size.height * width / image.size.width);
     }];
 }
 +(void)pin:(UIPinchGestureRecognizer *)pin{
